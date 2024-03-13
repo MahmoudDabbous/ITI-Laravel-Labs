@@ -24,12 +24,16 @@ Route::prefix('users')->group(function () {
         ->name('users.index');
     Route::get('/create', [UserController::class, 'create'])
         ->name('users.create');
+    Route::post('/', [UserController::class, 'store'])
+        ->name('users.store');
     Route::get('/{id}', [UserController::class, 'show'])
         ->whereNumber('id')
         ->name('users.show');
     Route::get('/{id}/edit', [UserController::class, 'edit'])
         ->whereNumber('id')
         ->name('users.edit');
+    Route::put('/{id}', [UserController::class, 'update'])
+        ->name('users.update');
 });
 
 Route::fallback(function () {
