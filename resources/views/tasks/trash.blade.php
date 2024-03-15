@@ -1,7 +1,7 @@
 @extends('layout.index')
-@section('title', 'User')
+@section('title', 'Trash')
 @section('content')
-    <h1>Tasks List</h1>
+    <h1>Trash</h1>
     <a href="{{ url('/tasks') }}" class="btn btn-info">Back</a>
     <table class="table">
         <thead>

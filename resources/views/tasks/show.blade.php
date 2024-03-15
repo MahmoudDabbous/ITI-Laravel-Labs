@@ -15,7 +15,7 @@
                 </td>
                 <td>
 
-                    <form method="post" action="{{ url("/tasks/{$task->id}") }}">
+                    <form method="post" action="{{ url("/tasks/{$task->id}/trash") }}">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">Delete</button>

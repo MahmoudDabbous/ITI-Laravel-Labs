@@ -1,5 +1,5 @@
 @extends('layout.index')
-@section('title', 'User')
+@section('title', 'Tasks List')
 @section('content')
     <h1>Tasks List</h1>
     <a href="{{ url("/tasks/create") }}" class="btn btn-primary">Create Task</a>
