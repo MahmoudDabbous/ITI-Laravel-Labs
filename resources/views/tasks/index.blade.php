@@ -1,6 +1,8 @@
 @extends('layout.index')
 @section('title', 'User')
 @section('content')
+    <h1>Tasks List</h1>
+    <a href="{{ url("/tasks/create") }}" class="btn btn-primary">Create Task</a>
     <table class="table">
         <thead>
             <tr>
@@ -25,7 +27,7 @@
                     </td>
                 </tr>
             @endforeach
-            {!! $tasks->links('pagination::bootstrap-5') !!}
         </tbody>
+        {!! $tasks->links('pagination::bootstrap-5') !!}
     </table>
 @endsection

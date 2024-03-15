@@ -1,5 +1,5 @@
 @extends('layout.index')
-@section('title', 'User')
+@section('title', 'Task')
 @section('content')
     <a href="{{ url("/tasks") }}" class="row btn btn-primary">Back</a>
     <table class="table">
