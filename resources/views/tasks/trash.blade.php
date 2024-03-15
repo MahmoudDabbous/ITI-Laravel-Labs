@@ -2,8 +2,7 @@
 @section('title', 'User')
 @section('content')
     <h1>Tasks List</h1>
-    <a href="{{ url("/tasks/create") }}" class="btn btn-primary">Create Task</a>
-    <a href="{{ url("/tasks/trash") }}" class="btn btn-danger">Trash</a>
+    <a href="{{ url('/tasks') }}" class="btn btn-info">Back</a>
     <table class="table">
         <thead>
             <tr>
@@ -18,9 +17,12 @@
                     <th scope="row">{{ $task->id }}</th>
                     <th scope="row">{{ $task->title }}</th>
                     <td colspan="4" scope="row">
-                        <a href="{{ url("/tasks/{$task->id}") }}" class="btn btn-info">More</a>
-                        <a href="{{ url("/tasks/{$task->id}/edit") }}" class="btn btn-warning">Edit</a>
-                        <form method="post" action="{{ url("/tasks/{$task->id}/trash") }}">
+                        <form method="post" action="{{ url("/tasks/{$task->id}/restore") }}">
+                            @csrf
+                            @method('PUT')
+                            <button type="submit" class="btn btn-info">Restore</button>
+                        </form>
+                        <form method="post" action="{{ url("/tasks/{$task->id}") }}">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger">Delete</button>

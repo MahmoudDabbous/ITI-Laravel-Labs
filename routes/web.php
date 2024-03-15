@@ -37,6 +37,9 @@ Route::prefix('users')->group(function () {
         ->name('users.update');
 });
 
+Route::delete('/tasks/{id}/trash', [TaskController::class, 'trash'])->name('tasks.trash');
+Route::put('/tasks/{id}/restore', [TaskController::class, 'restore'])->name('tasks.trash');
+Route::get('/tasks/trash', [TaskController::class, 'showTrash'])->name('tasks.trash');
 Route::resource('tasks', TaskController::class);
 
 Route::fallback(function () {

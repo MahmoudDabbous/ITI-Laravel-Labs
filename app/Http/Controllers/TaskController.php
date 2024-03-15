@@ -67,7 +67,25 @@ class TaskController extends Controller
      */
     public function destroy(string $id)
     {
+        Task::onlyTrashed()->findOrFail($id)->forceDelete();
+        return redirect()->route('tasks.index');
+    }
+
+    public function trash(string $id)
+    {
         Task::destroy($id);
         return redirect()->route('tasks.index');
+    }
+
+    public function restore(string $id)
+    {
+        Task::withTrashed()->findOrFail($id)->restore();
+        return redirect()->route('tasks.index');
+    }
+
+    public function showTrash()
+    {
+        $tasks = Task::onlyTrashed()->paginate(10);
+        return view('tasks.trash', compact('tasks'));
     }
 }
