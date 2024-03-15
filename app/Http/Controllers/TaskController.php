@@ -31,7 +31,7 @@ class TaskController extends Controller
     public function store(TaskRequest $request)
     {
         Task::create($request->validated());
-        return redirect()->route('tasks.index')->with('success', 'Task created successfully');
+        return redirect()->route('tasks.index');
     }
 
     /**
@@ -59,7 +59,7 @@ class TaskController extends Controller
     {
         $task = Task::findOrFail($id);
         $task->update($request->validated());
-        return redirect()->route('tasks.index')->with('success', 'Task updated successfully');
+        return redirect()->route('tasks.index');
     }
 
     /**
@@ -68,6 +68,6 @@ class TaskController extends Controller
     public function destroy(string $id)
     {
         Task::destroy($id);
-        return redirect()->route('tasks.index')->with('success', 'Task deleted successfully');
+        return redirect()->route('tasks.index');
     }
 }
