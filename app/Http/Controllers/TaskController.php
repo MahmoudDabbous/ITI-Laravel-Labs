@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\TaskRequest;
+use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
@@ -13,7 +16,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::paginate(10);
+        $tasks = Task::with('user')->paginate(10);
         return view('tasks.index', compact('tasks'));
     }
 
@@ -28,11 +31,15 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(TaskRequest $request)
+
+    public function store(StoreTaskRequest $request)
     {
-        Task::create($request->validated());
+        $task = new Task($request->validated());
+        $task->user()->associate(auth()->user());
+        $task->save();
         return redirect()->route('tasks.index');
     }
+
 
     /**
      * Display the specified resource.
@@ -55,7 +62,7 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(TaskRequest $request, string $id)
+    public function update(UpdateTaskRequest $request, string $id)
     {
         $task = Task::findOrFail($id);
         $task->update($request->validated());
@@ -85,7 +92,7 @@ class TaskController extends Controller
 
     public function showTrash()
     {
-        $tasks = Task::onlyTrashed()->paginate(10);
+        $tasks = Task::onlyTrashed()->where('user_id', '=', Auth::id())->paginate(10);
         return view('tasks.trash', compact('tasks'));
     }
 }

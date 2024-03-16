@@ -2,16 +2,19 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Task;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
-class TaskRequest extends FormRequest
+class UpdateTaskRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        $task = Task::findOrFail($this->route('id'));
+        return  $task->user_id === Auth::id();
     }
 
     /**
