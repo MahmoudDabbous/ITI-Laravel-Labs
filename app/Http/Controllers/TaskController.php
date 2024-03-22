@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTaskRequest;
-use App\Http\Requests\TaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class TaskController extends Controller
 {
@@ -34,7 +33,13 @@ class TaskController extends Controller
 
     public function store(StoreTaskRequest $request)
     {
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->extension();
+            $image->move(public_path('images'), $imageName);
+        }
         $task = new Task($request->validated());
+        $task->image = $imageName;
         $task->user()->associate(auth()->user());
         $task->save();
         return redirect()->route('tasks.index');
@@ -46,7 +51,8 @@ class TaskController extends Controller
      */
     public function show(string $id)
     {
-        $task = Task::findOrFail($id)->first();
+
+        $task = Task::findOrFail($id);
         return view('tasks.show', compact('task'));
     }
 
@@ -64,8 +70,21 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, string $id)
     {
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->extension();
+            $image->move(public_path('images'), $imageName);
+        }
         $task = Task::findOrFail($id);
-        $task->update($request->validated());
+        if ($request->hasFile('image')) {
+            $task->image ? unlink(public_path('images/' . $task->image)) : '';
+            $task->image = $imageName;
+        }
+        $task->update([
+            'title' => $request->title,
+            'description' => $request->description,
+            'image' => $task->image ?? '',
+        ]);
         return redirect()->route('tasks.index');
     }
 
@@ -74,7 +93,9 @@ class TaskController extends Controller
      */
     public function destroy(string $id)
     {
-        Task::onlyTrashed()->findOrFail($id)->forceDelete();
+        $task = Task::findOrFail($id);
+        $task->image ? unlink(public_path('images/' . $task->image)) : '';
+        $task->forceDelete();
         return redirect()->route('tasks.index');
     }
 

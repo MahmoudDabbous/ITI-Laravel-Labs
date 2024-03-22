@@ -7,6 +7,14 @@
             <tr>
                 <th>{{ $task->id }}</th>
                 <th>{{ $task->title }}</th>
+                <th>{{ $task->description }}</th>
+            </tr>
+            <tr>
+                @empty ($task->image)
+                    <th>No image</th>
+                @else
+                    <img src="{{ asset('images/' . $task->image) }}" alt="image" width="100" height="100">
+                @endif
             </tr>
             <tr>
                 @if ($task->user_id == Auth::id())
@@ -14,7 +22,6 @@
                         <a href="{{ url("/tasks/{$task->id}/edit") }}" class="btn btn-warning">Edit</a>
                     </td>
                     <td>
-
                         <form method="post" action="{{ url("/tasks/{$task->id}/trash") }}">
                             @csrf
                             @method('DELETE')
